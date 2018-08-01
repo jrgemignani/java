@@ -1,11 +1,12 @@
 // Leetcode, finds the longest palindrome that is a substring.
-// Dynamic Programming solution, O(n^2) time and space.
+// Dynamic Programming solution, O(n^2) time and space complexity.
 // -jrg
 
 class LongestPalindromeSubstring {
 
    private static String longestPalindromeSubstring(String A){
       if (A == null) return null;
+      if (A.length() == 0) return "";
 
       int len = A.length();
       int[][] OPT = new int[len][len];
@@ -36,10 +37,15 @@ class LongestPalindromeSubstring {
 
    public static void main(String[] args){
       String A1 = "abbdbafffdddfffaaajjj";
-      String B1 = longestPalindromeSubstring(A1);
       String A2 = "abbaba";
-      String B2 = longestPalindromeSubstring(A2);
-      System.out.println("A1 = " + A1 + ", B1 = " + B1);
-      System.out.println("A2 = " + A2 + ", B2 = " + B2);
+      String A3 = "a";
+      String A4 = "";
+      String A5 = "aa";
+      String[] As = {A1, A2, A3, A4, A5};
+      
+      for (String A : As){
+         String B = longestPalindromeSubstring(A);
+         System.out.println("A = " + A + ", B = " + B);
+      }
    }
 }
