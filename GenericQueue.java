@@ -59,7 +59,7 @@ class GenericQueue<E> {
       return queueHead.data;
    }
 
-   public static void main(String[] args) throws Exception{
+   public static void main(String[] args) throws NoSuchElementException{
       GenericQueue<Integer> mQueue1 = new GenericQueue<Integer>();
       GenericQueue<Double> mQueue2 = new GenericQueue<Double>();
 
