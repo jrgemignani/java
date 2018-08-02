@@ -40,7 +40,7 @@ class GenericStack<E> {
       return stack.data;
    }
 
-   public static void main(String[] args) throws Exception{
+   public static void main(String[] args) throws EmptyStackException{
       GenericStack<Integer> mStack1 = new GenericStack<Integer>();
       GenericStack<Double> mStack2 = new GenericStack<Double>();
 
