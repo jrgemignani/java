@@ -1,4 +1,10 @@
-// LeetCode to find lowest common ancestor
+// LeetCode to find lowest common ancestor.
+// Create (building) tree is O(2n) = O(n)
+// Lowest common ancestor is O(n)
+// The assumption is that the tree contains unique valued nodes and
+// that p and q exist in the tree.
+//
+// -jrg
 //
 
 import java.util.Stack;
