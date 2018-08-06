@@ -12,9 +12,9 @@ import java.util.ArrayList;
 class BinaryTreeLevelOrderTransveral {
 
    // helper method to print out the list of lists
-   private static void print(List<List<Integer>> lols){
+   private static <T> void print(List<List<T>> lols){
       System.out.println("[");
-      for(List<Integer> list : lols){
+      for(List<T> list : lols){
          System.out.print("[");
          int len = list.size();
          for(int i = 0; i < len; i++){
@@ -30,16 +30,16 @@ class BinaryTreeLevelOrderTransveral {
 
    // method to create a list of lists with each list being the nodes for 
    // that specific level
-   private static List<List<Integer>> levelOrder(TreeNode<Integer> root){
+   private static <T> List<List<T>> levelOrder(TreeNode<T> root){
       // if passed a null, return a null
       if (root == null) return null;
 
       // create a queue for BFS
-      Queue<TreeNode<Integer>> bfs = new LinkedList<TreeNode<Integer>>();
+      Queue<TreeNode<T>> bfs = new LinkedList<TreeNode<T>>();
       // create the list of lists to hold the levels
-      List<List<Integer>> levels = new ArrayList<List<Integer>>();
+      List<List<T>> levels = new ArrayList<List<T>>();
       // create a map for keeping track of the levels
-      Map<TreeNode<Integer>, Integer> map = new HashMap<TreeNode<Integer>, Integer>();
+      Map<TreeNode<T>, Integer> map = new HashMap<TreeNode<T>, Integer>();
 
       // put in the root, and it's level - 0
       bfs.add(root);
@@ -47,10 +47,10 @@ class BinaryTreeLevelOrderTransveral {
 
       // perform a BFS, storing the nodes for each level expanded
       while(!bfs.isEmpty()){
-         TreeNode<Integer> node = bfs.remove();
-         TreeNode<Integer> left = node.getLeftChild();
-         TreeNode<Integer> right = node.getRightChild();
-         Integer value = node.getValue();
+         TreeNode<T> node = bfs.remove();
+         TreeNode<T> left = node.getLeftChild();
+         TreeNode<T> right = node.getRightChild();
+         T value = node.getValue();
 
          int level = map.get(node);
          if (left != null){
@@ -63,7 +63,7 @@ class BinaryTreeLevelOrderTransveral {
          }
 
          if (level == levels.size())
-            levels.add(new ArrayList<Integer>());
+            levels.add(new ArrayList<T>());
 
          levels.get(level).add(value);
       }
@@ -71,7 +71,7 @@ class BinaryTreeLevelOrderTransveral {
    }
 
    // helper function to print out the integer array
-   private static void print(Integer[] array){
+   private static <T> void print(T[] array){
       System.out.print("[");
       for (int i = 0; i < array.length; i++){
          if (i+1 < array.length)
@@ -81,17 +81,26 @@ class BinaryTreeLevelOrderTransveral {
       }
    }
 
-   public static void main(String[] args){
-      Integer[] bt1 = {3, 9, 20, null, null, 15, 7};
-      Integer[] bt2 = {3, 9, 20, null, null, 15, 7, null, null, null, null, 18};
-      Integer[][] bts = {bt1, bt2};
-
-      for (Integer[] bt : bts){
-         print(bt);
-         TreeNode<Integer> root = TreeNode.<Integer>createTree(bt);
-         List<List<Integer>> levels = levelOrder(root);
+   private static <T extends Comparable<T>> void test(T[][] ts){
+      for (T[] t : ts){
+         print(t);
+         TreeNode<T> root = TreeNode.<T>createTree(t);
+         List<List<T>> levels = levelOrder(root);
          print(levels);
          System.out.println();
       }
+   }
+
+   public static void main(String[] args){
+      Integer[] bt1 = {3, 9, 20, null, null, 15, 7};
+      Integer[] bt2 = {3, 9, 20, null, null, 15, 7, null, null, null, null, 18};
+      Integer[][] bt1s = {bt1, bt2};
+
+      Double[] bt21 = {3.0, 9.0, 20.0, null, null, 15.0, 7.0};
+      Double[] bt22 = {3.1, 9.1, 20.1, null, null, 15.1, 7.1, null, null, null, null, 18.1};
+      Double[][] bt2s = {bt21, bt22};
+
+      test(bt1s);
+      test(bt2s);
    }
 }
