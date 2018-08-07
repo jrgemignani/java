@@ -39,7 +39,7 @@ public class TreeNode<T> {
    // method to create a tree from a binary tree array
    public static <U extends Comparable<U>> TreeNode<U> createTree(U[] btreeArray){
       // return null if null BT array is passed
-      if (btreeArray == null) return null;
+      if (btreeArray == null || btreeArray.length == 0) return null;
 
       // create a map of node value to TreeNode 
       Map<U, TreeNode<U>> map = new HashMap<U, TreeNode<U>>();
