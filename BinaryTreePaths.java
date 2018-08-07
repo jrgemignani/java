@@ -10,71 +10,38 @@ import java.util.HashMap;
 
 public class BinaryTreePaths {
 
-   private static class TreeNode {
-      private TreeNode left = null;
-      private TreeNode right = null;
-      private final int val;
-      private TreeNode(int val){
-         this.val = val;
-      }
-   }
-
    // method to return a List of Strings representing all the paths 
    // from the root node of the tree to it's leaves. If the tree
    // is empty, it returns an empty list.
-   private static List<String> binaryTreePaths(TreeNode root){
+   private static <T> List<String> binaryTreePaths(TreeNode<T> root){
       List<String> paths = new ArrayList<String>();
       if (root == null) return paths;
 
       // we need a stack for dfs and for the paths
-      Stack<TreeNode> dfsStack = new Stack<TreeNode>();
+      Stack<TreeNode<T>> dfsStack = new Stack<TreeNode<T>>();
       Stack<String> pathStack = new Stack<String>();
       // initialize both stacks
       dfsStack.push(root);
-      pathStack.push(String.valueOf(root.val));
+      pathStack.push(String.valueOf(root.getValue()));
       // while we still have nodes to process
       while(!dfsStack.isEmpty() && !pathStack.isEmpty()){
-         TreeNode node = dfsStack.pop();
+         TreeNode<T> node = dfsStack.pop();
+         TreeNode<T> left = node.getLeftChild();
+         TreeNode<T> right = node.getRightChild();
          String path = pathStack.pop();
-         if (node.right != null){
-            dfsStack.push(node.right);
-            pathStack.push(path + "->" + String.valueOf(node.right.val));
+         if (right != null){
+            dfsStack.push(right);
+            pathStack.push(path + "->" + String.valueOf(right.getValue()));
          }
-         if (node.left != null){
-            dfsStack.push(node.left);
-            pathStack.push(path + "->" + String.valueOf(node.left.val));
+         if (left != null){
+            dfsStack.push(left);
+            pathStack.push(path + "->" + String.valueOf(left.getValue()));
          }
-         if (node.left == null && node.right == null){
+         if (left == null && right == null){
             paths.add(path);
          }
       }
       return paths;
-   }
-
-   private static TreeNode createTree(Integer[] btreeArray){
-      if (btreeArray == null || btreeArray.length == 0) return null;
-
-      Map<Integer, TreeNode> map = new HashMap<Integer, TreeNode>();
-      for (Integer val : btreeArray){
-         if (val != null){
-            TreeNode node = new TreeNode(val);
-            map.put(val, node);
-         }
-      }
-      int len = btreeArray.length;
-      for (int i = 0; i < len; i++){
-         if (btreeArray[i] == null) continue;
-         TreeNode node = map.get(btreeArray[i]);
-         int li = 2*i+1;
-         int ri = 2*i+2;
-         if (li < len && btreeArray[li] != null){
-            node.left = map.get(btreeArray[li]);
-         }
-         if (ri < len && btreeArray[ri] != null){
-            node.right = map.get(btreeArray[ri]);
-         }
-      }
-      return map.get(btreeArray[0]);
    }
 
    private static <T> void print(List<T> list){
@@ -99,7 +66,7 @@ public class BinaryTreePaths {
       Integer[][] btas = {bta0, bta1, bta2, bta3, bta4, bta5};
 
       for (Integer[] bta : btas){
-         TreeNode root = createTree(bta);
+         TreeNode<Integer> root = TreeNode.<Integer>createTree(bta);
          List<String> paths = binaryTreePaths(root);
          print(paths);
       }
