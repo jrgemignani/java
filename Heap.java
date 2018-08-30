@@ -1,16 +1,21 @@
 import java.util.NoSuchElementException;
 
-class Heap {
+class Heap<T extends Comparable<T>> {
 
-   private final int[] heap;
+   public static enum Type {MINIMUM, MAXIMUM};
+
+   private final T[] heap;
    private final int capacity;
+   private final Type type;
    private int next = 1;
 
-   public Heap(int capacity) throws IllegalArgumentException {
+   @SuppressWarnings("unchecked")
+   public Heap(int capacity, Type type) throws IllegalArgumentException {
       if (capacity < 2)
          throw new IllegalArgumentException("Minimum heap capacity must be > 1");
       this.capacity = capacity;
-      heap = new int[capacity+1];
+      this.type = type;
+      heap = (T[]) new Comparable[capacity+1];
    }
 
    private int left(int i){
@@ -28,16 +33,22 @@ class Heap {
    private boolean hasHeapProperty(int p, int c){
       if (p < 1 || p >= next) return true;
       if (c < 1 || c >= next) return true;
-      return (heap[p] < heap[c]);
+      
+      boolean result = false;
+      if (type == Type.MINIMUM)
+         result = (heap[p].compareTo(heap[c]) < 0);
+      if (type == Type.MAXIMUM)
+         result = (heap[p].compareTo(heap[c]) > 0);
+      return result;
    }
 
-   private int remove(int i) throws IllegalArgumentException, NoSuchElementException {
+   private T remove(int i) throws IllegalArgumentException, NoSuchElementException {
       if (isEmpty())
          throw new IllegalArgumentException("Empty heap");
       if (i >= next)
          throw new NoSuchElementException("Invalid element");
 
-      int value = heap[i];
+      T value = heap[i];
       heap[i] = heap[next-1];
       next--;
       if (getSize() >1) heapifyDown(i);
@@ -61,12 +72,11 @@ class Heap {
          else
             k = hasHeapProperty(i, l) ? r : l;
 
-         int temp = heap[i];
+         T temp = heap[i];
          heap[i] = heap[k];
          heap[k] = temp;
          i = k;
       }
-      
    }
 
    private void heapifyUp(int i) throws IllegalArgumentException {
@@ -77,7 +87,7 @@ class Heap {
       if (next == 2) return;
 
       while (i > 1 && !hasHeapProperty(parent(i), i)){
-         int temp = heap[parent(i)];
+         T temp = heap[parent(i)];
          heap[parent(i)] = heap[i];
          heap[i] = temp;
          i = parent(i);
@@ -96,7 +106,7 @@ class Heap {
       return (next == 1);
    }
 
-   public void add(int value) throws IllegalArgumentException {
+   public void add(T value) throws IllegalArgumentException {
       if (next > capacity) 
          throw new IllegalArgumentException("Exceeded heap capacity");
       heap[next] = value;
@@ -104,17 +114,33 @@ class Heap {
       if (!isEmpty()) heapifyUp(next-1);
    }
 
-   public int remove() throws IllegalArgumentException {
+   public T remove() throws IllegalArgumentException {
       return remove(1);
    }
 
-   public static void main(String[] args){
-      Heap heap = new Heap(100);
+   public static <T> void print(T[] A){
+      if (A == null){
+         System.out.println("null");
+         return;
+      }
+
+      System.out.print("[");
+      int len = A.length;
+      for (int i = 0; i < len; i++){
+         if (i+1 < len)
+            System.out.print(A[i] + ", ");
+         else
+            System.out.println(A[i] + "] length = " + len);
+      }
+   }
+
+   public static <T extends Comparable<T>> void test(Heap<T> heap, T[] A){
       System.out.println("Capacity = " + heap.getCapacity());
       System.out.println("Size = " + heap.getSize());
+      System.out.print("A = ");
+      print(A);
 
-      Integer[] A = {5, 3, 11, 1, 4, -1, -10, 20, 30, 25};
-      for (Integer a : A){
+      for (T a : A){
          heap.add(a);
       }
 
@@ -123,7 +149,25 @@ class Heap {
 
       while (!heap.isEmpty()){
          System.out.println("Minimum = " + heap.remove());
-      } 
+      }
+      System.out.println();
    }
 
+   public static void main(String[] args){
+      int n = 100;
+      //Heap.Type t = Heap.Type.MINIMUM;
+      Heap.Type t = Heap.Type.MAXIMUM;
+
+      Heap<Integer> heapI = new Heap<Integer>(n, t);
+      Integer[] A1 = {5, 3, 11, 1, 4, -1, -10, 20, 30, 25};
+      test(heapI, A1);
+
+      Heap<Character> heapC = new Heap<Character>(n, t);
+      Character[] A2 = {'a', 'A', 'Z', 'q', 'b', 'Y', 'm', 'B'};
+      test(heapC, A2);
+
+      Heap<String> heapS = new Heap<String>(n, t);
+      String[] A3 = {"zz", "a", "aaa", "ddddd", "d", "ccc", "Cc", "CC"};
+      test(heapS, A3);
+   }
 }
