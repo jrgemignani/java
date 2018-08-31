@@ -24,4 +24,8 @@ class GraphNode<T> {
    public void addChild(GraphNode<T> node){
       children.add(node);
    }
+   @Override
+   public String toString(){
+      return data.toString();
+   }
 }
