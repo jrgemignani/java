@@ -1,3 +1,16 @@
+// Solution to the code problem of calculating the Depth Sum given a string
+//
+// For example: "{1,{4,{6}}}" 
+//
+// Each open paren is a new depth (goes down one level)
+// Each closed paren closes that depth (goes back up one level). 
+// A comma separates a list of numbers.
+//
+// So, for {1,{4,{6}}} the answer would be 27
+//
+// The time complexity is O(N) and the space complexity is O(1)
+// -jrg
+//
 class DepthSum {
 
    // helper method to check if character is a '{', '}', or ','
@@ -50,17 +63,21 @@ class DepthSum {
       return sum;
    }
 
+   // main entry point with tests
    public static void main(String[] args){
+      // Some test cases
       String A1 = "{{1,1},2,{1,1}}";
       String A2 = "{1,{4,{6}}}";
       String A3 = null;
       String A4 = "";
+
+      // group them all together
       String[] As = {A1, A2, A3, A4};
 
+      // iterate through the tests, outputing the results
       for (String A : As){
          int dsum = depthSum(A);
          System.out.println("A = " + A + " = " + dsum);
       }
-
    }
 }
